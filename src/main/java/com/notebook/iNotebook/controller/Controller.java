@@ -56,16 +56,16 @@ public class Controller {
 		}
 	}
 	
-	@PutMapping("/{username}")
-	public String findUsername(@PathVariable String username) {
-		System.out.println(username);
-		User user1 = (User) userService.loadUserByUsername(username);
-		if(user1==null) {
-			return "User Not Found";
-		}else {
-			return user1.toString();
-		}
-	}
+//	@PutMapping("/{username}")
+//	public String findUsername(@PathVariable String username) {
+//		System.out.println(username);
+//		User user1 = (User) userService.loadUserByUsername(username);
+//		if(user1==null) {
+//			return "User Not Found";
+//		}else {
+//			return user1.toString();
+//		}
+//	}
 	
 	
 //	@GetMapping("/current-user")

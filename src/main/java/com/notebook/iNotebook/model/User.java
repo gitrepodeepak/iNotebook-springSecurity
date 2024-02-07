@@ -11,20 +11,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.mongodb.lang.NonNull;
 
 @Document(collection = "users")
-public class User implements UserDetails{
+//public class User implements UserDetails{
+	public class User {
 	
-	/**
-	 * 
-	 */
+//	/**
+//	 * 
+//	 */
+//	@Id
+//	private static final long serialVersionUID = 1L;
+	
+//	@Override
+//	public Collection<? extends GrantedAuthority> getAuthorities() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+	
 	@Id
-	private static final long serialVersionUID = 1L;
-	
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+	private String id;
 	@NonNull
 	@Indexed(unique=true)
 	private String username;
@@ -34,8 +37,8 @@ public class User implements UserDetails{
 	@NonNull
 	public String password;
 	
-	public long getId() {
-		return serialVersionUID;
+	public String getId() {
+		return id;
 	}
 
 	public String getUsername() {
@@ -59,30 +62,29 @@ public class User implements UserDetails{
 	
 	@Override
 	public String toString() {
-		return "User [serialVersionUID=" + serialVersionUID + ", username=" 
-				+ username + ", password=" + password + "]";
+		return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + "]";
 	}
 	
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+//	@Override
+//	public boolean isAccountNonExpired() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
+//	@Override
+//	public boolean isAccountNonLocked() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
+//	@Override
+//	public boolean isCredentialsNonExpired() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
+//	@Override
+//	public boolean isEnabled() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
 	
 
 }

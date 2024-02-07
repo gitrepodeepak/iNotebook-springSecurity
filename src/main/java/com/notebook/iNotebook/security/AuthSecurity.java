@@ -8,6 +8,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -19,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.notebook.iNotebook.service.UserService;
+
 //import com.notebook.iNotebook.service.UserService;
 
 
@@ -26,17 +29,25 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class AuthSecurity{
 
-	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+//	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+	@Bean
+	PasswordEncoder passwordEncoder() {
+	    return new BCryptPasswordEncoder();
+	}
 	
 	@Bean
     UserDetailsService users() {
 		UserDetails user = User.builder()
 			.username("root")
-			.password("{bcrypt}$2a$10$3qZeNlBjsDoJ/1tCSJ40M.m/ov5ImKm5SCvC9Mtw9v5hlhyOcFz0a")
+			.password(passwordEncoder().encode("root1234"))
 			.roles("USER","ADMIN")
 			.build();
 		return new InMemoryUserDetailsManager(user);
 	}
+//	
+//	@Autowired
+//	UserService userService;
+
 	
     @Bean
     SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
@@ -54,24 +65,18 @@ public class AuthSecurity{
 //			)
 //            .csrf().ignoringRequestMatchers("/api/**")
 			.httpBasic(Customizer.withDefaults())
-//			.formLogin(Customizer.withDefaults())
+			.formLogin(Customizer.withDefaults())
 //            .rememberMe(Customizer.withDefaults())
             ;
 
 		return http.build();
 	}
     
-//    @Bean
-//	AuthenticationManager authenticationManager(
-//			UserDetailsService userDetailsService,
-//			PasswordEncoder passwordEncoder) {
-//		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-//		authenticationProvider.setUserDetailsService(userDetailsService);
-//		authenticationProvider.setPasswordEncoder(passwordEncoder);
-//
-//		return new ProviderManager(authenticationProvider);
-//	}
-
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    	return configuration.getAuthenticationManager();
+    }
     
+
     
 }
