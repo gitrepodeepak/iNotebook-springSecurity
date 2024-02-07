@@ -1,0 +1,76 @@
+package com.notebook.iNotebook.controller;
+
+//import java.security.Principal;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.notebook.iNotebook.model.User;
+import com.notebook.iNotebook.service.UserService;
+
+@RestController
+@CrossOrigin
+@RequestMapping("/api")
+public class Controller {
+	
+	@Autowired
+	private UserService userService;
+	
+	@GetMapping("/")
+	public String home() {
+		return "index.html";
+	}
+	
+//	@PostMapping("/login")
+//	public String login() {
+//		return "login.html";
+//	}
+	
+	@GetMapping("/all")
+	public List<User> findAll(){
+		System.out.println("Request Came");
+		
+		return userService.findAllUser();
+	}
+	
+	@PutMapping("/save")
+	public String save(@RequestBody User user) throws Exception{
+		System.out.println("Request Came" + user);
+		if(user.getUsername().isEmpty() || user.getEmail().isEmpty() || user.getPassword().isEmpty()){
+			return "username, email or password cannot be empty";
+		}else if(user.getPassword().length()<5){
+			return "Password cannot be less than 5 Characters";
+		}
+		else {			
+			userService.saveUser(user);	
+			return "Account Created Sucessful";
+		}
+	}
+	
+	@PutMapping("/{username}")
+	public String findUsername(@PathVariable String username) {
+		System.out.println(username);
+		User user1 = (User) userService.loadUserByUsername(username);
+		if(user1==null) {
+			return "User Not Found";
+		}else {
+			return user1.toString();
+		}
+	}
+	
+	
+//	@GetMapping("/current-user")
+//	public String getCurrentUser(Principal principal) {
+//		return principal.getName();
+//	}
+		
+}
