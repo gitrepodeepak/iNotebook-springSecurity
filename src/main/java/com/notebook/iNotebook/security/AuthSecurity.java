@@ -30,20 +30,20 @@ import com.notebook.iNotebook.service.UserService;
 public class AuthSecurity{
 
 //	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
-	@Bean
-	PasswordEncoder passwordEncoder() {
-	    return new BCryptPasswordEncoder();
-	}
+//	@Bean
+//	PasswordEncoder passwordEncoder() {
+//	    return new BCryptPasswordEncoder();
+//	}
 	
-	@Bean
-    UserDetailsService users() {
-		UserDetails user = User.builder()
-			.username("root")
-			.password(passwordEncoder().encode("root1234"))
-			.roles("USER","ADMIN")
-			.build();
-		return new InMemoryUserDetailsManager(user);
-	}
+//	@Bean
+//    UserDetailsService users() {
+//		UserDetails user = User.builder()
+//			.username("root")
+//			.password(passwordEncoder().encode("root1234"))
+//			.roles("USER","ADMIN")
+//			.build();
+//		return new InMemoryUserDetailsManager(user);
+//	}
 //	
 //	@Autowired
 //	UserService userService;
@@ -57,15 +57,15 @@ public class AuthSecurity{
         	.csrf(csrf->csrf
         			.disable())
             .authorizeHttpRequests((authorize) -> authorize
-            		.requestMatchers("/").permitAll()
+            		.requestMatchers("/","/api/save").permitAll()
                     .anyRequest().authenticated()
             )
-//			.formLogin(formLogin -> formLogin
-//			.loginPage("/api/login").permitAll()
-//			)
+			.formLogin(formLogin -> formLogin
+			.loginPage("/api/login").permitAll()
+			)
 //            .csrf().ignoringRequestMatchers("/api/**")
 			.httpBasic(Customizer.withDefaults())
-			.formLogin(Customizer.withDefaults())
+//			.formLogin(Customizer.withDefaults())
 //            .rememberMe(Customizer.withDefaults())
             ;
 

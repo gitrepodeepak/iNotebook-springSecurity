@@ -2,8 +2,11 @@ package com.notebook.iNotebook.controller;
 
 //import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,15 +28,12 @@ public class Controller {
 	@Autowired
 	private UserService userService;
 	
+	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+	
 	@GetMapping("/")
 	public String home() {
 		return "index.html";
 	}
-	
-//	@PostMapping("/login")
-//	public String login() {
-//		return "login.html";
-//	}
 	
 	@GetMapping("/all")
 	public List<User> findAll(){
@@ -41,6 +41,17 @@ public class Controller {
 		
 		return userService.findAllUser();
 	}
+	
+	@PutMapping("/login")
+	public String login(@RequestBody User user) {
+		UserDetails myUser = userService.loadUserByUsername(user.getUsername());
+		if(encoder.matches(user.getPassword(), myUser.getPassword())) {
+			return "Successfully Logged In!";			
+		}else {
+			return "Password did not Match!";
+		}
+	}
+	
 	
 	@PutMapping("/save")
 	public String save(@RequestBody User user) throws Exception{
@@ -50,22 +61,13 @@ public class Controller {
 		}else if(user.getPassword().length()<5){
 			return "Password cannot be less than 5 Characters";
 		}
-		else {			
+		else {		
+			String result = encoder.encode(user.getPassword());
+			user.setPassword(result);
 			userService.saveUser(user);	
 			return "Account Created Sucessful";
 		}
 	}
-	
-//	@PutMapping("/{username}")
-//	public String findUsername(@PathVariable String username) {
-//		System.out.println(username);
-//		User user1 = (User) userService.loadUserByUsername(username);
-//		if(user1==null) {
-//			return "User Not Found";
-//		}else {
-//			return user1.toString();
-//		}
-//	}
 	
 	
 //	@GetMapping("/current-user")

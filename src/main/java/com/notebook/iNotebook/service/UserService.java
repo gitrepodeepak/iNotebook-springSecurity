@@ -19,28 +19,28 @@ import com.notebook.iNotebook.dao.UserDao;
 import com.notebook.iNotebook.model.User;
 
 @Service
-//public class UserService implements UserDetailsService{
-public class UserService{
+public class UserService implements UserDetailsService{
+//public class UserService{
 	
 	
 	@Autowired
 	private UserDao userDao;
 	
-//	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
-	
-//	@Override
-//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//		return userDao.findByUsername(username);
-//		
-//	}
+	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
 	
 	public List<User> findAllUser(){
 		return userDao.findAll();
 	}
 	
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return userDao.findByUsername(username);
+		
+	}
+	
+	
 	public User saveUser(User user) {
-//		String result = encoder.encode(user.getPassword());
-//		user.setPassword(result);
 		return userDao.save(user);
 	}
 	
