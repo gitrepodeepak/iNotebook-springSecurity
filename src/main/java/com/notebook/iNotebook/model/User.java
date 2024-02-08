@@ -21,7 +21,6 @@ public class User implements UserDetails{
 
 	
 	@Id
-	private String id;
 	@NonNull
 	@Indexed(unique=true)
 	private String username;
@@ -30,14 +29,14 @@ public class User implements UserDetails{
 	private String email;
 	@NonNull
 	public String password;
-	
-	public String getId() {
-		return id;
-	}
-//	public String setId() {
-//		return UUID.randomUUID().toString();
-//	}
 
+	public User(String username, String email, String password) {
+		super();
+		this.username = username;
+		this.email = email;
+		this.password = password;
+	}
+	
 	public String getUsername() {
 		return username;
 	}
@@ -59,7 +58,7 @@ public class User implements UserDetails{
 	
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + "]";
+		return "User [username=" + username + ", email=" + email + ", password=" + password + "]";
 	}
 	
 	@Override

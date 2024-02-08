@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Singup</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Your CSS file -->
+</head>
+<body>
+    <div class="login-container">
+        <h2>Signup</h2>
+        <form th:action="@{/signup}" method="post">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" />
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" />
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" />
+            </div>
+            <button type="submit">Signup</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -29,11 +29,19 @@ import com.notebook.iNotebook.service.UserService;
 @EnableWebSecurity
 public class AuthSecurity{
 
-//	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
-//	@Bean
-//	PasswordEncoder passwordEncoder() {
-//	    return new BCryptPasswordEncoder();
-//	}
+	@Autowired
+	private UserService userService;
+	
+	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+	
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+   	 auth.userDetailsService(userService).passwordEncoder(encoder);
+   }
+	
+//  @Bean
+//  AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+//  	return configuration.getAuthenticationManager();
+//  }
 	
 //	@Bean
 //    UserDetailsService users() {
@@ -57,11 +65,11 @@ public class AuthSecurity{
         	.csrf(csrf->csrf
         			.disable())
             .authorizeHttpRequests((authorize) -> authorize
-            		.requestMatchers("/","/api/save").permitAll()
+            		.requestMatchers("/","all","/login","/signup").permitAll()
                     .anyRequest().authenticated()
             )
 			.formLogin(formLogin -> formLogin
-			.loginPage("/api/login").permitAll()
+			.loginPage("/loginform").permitAll()
 			)
 //            .csrf().ignoringRequestMatchers("/api/**")
 			.httpBasic(Customizer.withDefaults())
@@ -71,12 +79,5 @@ public class AuthSecurity{
 
 		return http.build();
 	}
-    
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-    	return configuration.getAuthenticationManager();
-    }
-    
-
     
 }
