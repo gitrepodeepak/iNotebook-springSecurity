@@ -1,7 +1,7 @@
 package com.notebook.iNotebook.dao;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-//import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.notebook.iNotebook.model.User;
 

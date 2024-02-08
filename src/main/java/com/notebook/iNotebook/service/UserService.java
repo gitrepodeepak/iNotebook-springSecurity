@@ -2,6 +2,7 @@ package com.notebook.iNotebook.service;
 
 import java.util.List;
 
+import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.notebook.iNotebook.dao.UserDao;
+import com.notebook.iNotebook.model.MyUserDetails;
 import com.notebook.iNotebook.model.User;
 
 @Service
@@ -26,7 +28,9 @@ public class UserService implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userDao.findByUsername(username);
+		User user = (User) userDao.findByUsername(username);
+		return new MyUserDetails(user);
+//		return userDao.findByUsername(username);
 		
 	}
 	

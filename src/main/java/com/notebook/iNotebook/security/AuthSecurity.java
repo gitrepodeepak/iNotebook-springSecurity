@@ -29,52 +29,53 @@ import com.notebook.iNotebook.service.UserService;
 @EnableWebSecurity
 public class AuthSecurity{
 
-	@Autowired
-	private UserService userService;
+//	@Autowired
+//	private UserService userService;
 	
-	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+//	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
 	
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-   	 auth.userDetailsService(userService).passwordEncoder(encoder);
-   }
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//   	 auth.userDetailsService(userService).passwordEncoder(encoder);
+//   }
+	
+	@Bean
+	protected AuthenticationManager authenticationManager( UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService);
+		authenticationProvider.setPasswordEncoder(passwordEncoder);
+
+		return new ProviderManager(authenticationProvider);
+	}
 	
 //  @Bean
 //  AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 //  	return configuration.getAuthenticationManager();
 //  }
 	
-//	@Bean
-//    UserDetailsService users() {
-//		UserDetails user = User.builder()
-//			.username("root")
-//			.password(passwordEncoder().encode("root1234"))
-//			.roles("USER","ADMIN")
-//			.build();
-//		return new InMemoryUserDetailsManager(user);
-//	}
-//	
-//	@Autowired
-//	UserService userService;
+	@Bean
+	protected PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder(16);
+	}
 
 	
     @Bean
-    SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
+    protected SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
         // @formatter:off
         http
 //        	.securityMatcher("/**")
         	.csrf(csrf->csrf
         			.disable())
             .authorizeHttpRequests((authorize) -> authorize
-            		.requestMatchers("/","all","/login","/signup").permitAll()
+            		.requestMatchers("/loginform","/signupform").permitAll()
                     .anyRequest().authenticated()
             )
-			.formLogin(formLogin -> formLogin
-			.loginPage("/loginform").permitAll()
-			)
+//			.formLogin(formLogin -> formLogin
+//			.loginPage("/loginform").permitAll()
+//			)
 //            .csrf().ignoringRequestMatchers("/api/**")
 			.httpBasic(Customizer.withDefaults())
-//			.formLogin(Customizer.withDefaults())
-//            .rememberMe(Customizer.withDefaults())
+			.formLogin(Customizer.withDefaults())
+            .rememberMe(Customizer.withDefaults())
             ;
 
 		return http.build();

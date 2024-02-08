@@ -12,12 +12,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.mongodb.lang.NonNull;
 
 @Document(collection = "users")
-public class User implements UserDetails{
-//	public class User {
+//public class User implements UserDetails{
+	public class User {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+//	private static final long serialVersionUID = 1L;
 
 	
 	@Id
@@ -61,28 +61,28 @@ public class User implements UserDetails{
 		return "User [username=" + username + ", email=" + email + ", password=" + password + "]";
 	}
 	
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+//	@Override
+//	public Collection<? extends GrantedAuthority> getAuthorities() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//	
+//	@Override
+//	public boolean isAccountNonExpired() {
+//		return true;
+//	}
+//	@Override
+//	public boolean isAccountNonLocked() {
+//		return true;
+//	}
+//	@Override
+//	public boolean isCredentialsNonExpired() {
+//		return true;
+//	}
+//	@Override
+//	public boolean isEnabled() {
+//		return true;
+//	}
 	
 
 }

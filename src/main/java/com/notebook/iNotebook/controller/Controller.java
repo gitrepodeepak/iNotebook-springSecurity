@@ -5,9 +5,13 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,23 +34,36 @@ public class Controller {
 	private UserService userService;
 	
 	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+
 	
-	PrintWriter out = new PrintWriter(System.out); 
+//	PrintWriter out = new PrintWriter(System.out); 
 	
 	@GetMapping("/")
 	public String home() {
 		return "index.html";
 	}
 	
-	@PostMapping("/all")
-	public List<User> findAll(){
-		System.out.println("Request Came");
-		
-		return userService.findAllUser();
-	}
+//	private AuthenticationManager authenticationManager;
+//
+//	public void LoginController(AuthenticationManager authenticationManager) {
+//		this.authenticationManager = authenticationManager;
+//	}
+//
+//	@PostMapping("/login")
+//	public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
+//		Authentication authenticationRequest =
+//			UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(), loginRequest.password());
+//		Authentication authenticationResponse =
+//			this.authenticationManager.authenticate(authenticationRequest);
+//		// ...
+//	}
+	
+//	public record LoginRequest(String username, String password) {
+//	}
+	
 	
 	@GetMapping("/loginform")
-	public String loginForm() {
+	public String loginform() {
 		return "login.html";
 	}
 	
@@ -61,12 +78,14 @@ public class Controller {
 //	}
 	
 	@PostMapping("/login")
-	public String login(@RequestParam String username, @RequestParam String password) throws Exception{
+	public String login(@RequestParam String username, @RequestParam String password, Model model) throws Exception{
 		UserDetails myUser = userService.loadUserByUsername(username);
 		if(encoder.matches(password, myUser.getPassword())) {
-			return "index.html";			
+			model.addAttribute("message", "Login Success");
+			return "result.html";			
 		}else {
-			return "Password did not Match!";
+			model.addAttribute("message", "Password did not Match!");
+			return "result.html";
 		}
 	}
 	
@@ -96,28 +115,34 @@ public class Controller {
 //	}
 	
 	@PostMapping("/signup")
-	public String signup(@RequestParam String username, @RequestParam String email, @RequestParam String password) throws Exception{
+	public String signup(@RequestParam String username,
+			@RequestParam String email,
+			@RequestParam String password, Model model) throws Exception{
 		if(username.isEmpty() || email.isEmpty() || password.isEmpty()){
-			return "<h1>username, email or password cannot be empty</h1>";
+			model.addAttribute("message", "username, email or password cannot be empty");
+			return "result.html";
 		}else if(password.length()<5){
-			return "<h1>Password cannot be less than 5 Characters</h1>";
+			model.addAttribute("message", "Password can't be less than 5 characters!");
+			return "result.html";
 		}
 		else {			
 			if (userService.loadUserByUsername(username) != null ) {
-				throw new Exception("User already register");
+				model.addAttribute("message", "username, already register");
+				return "result.html";
 			}else {
 			String result = encoder.encode(password);
-			User myUser = new User(username, email, password);
+			User myUser = new User(username, email, result);
 			userService.saveUser(myUser);	
-			return "<h1>Account Created Sucessful</h1>";
+			model.addAttribute("message", "account created success");
+			return "result.html";
 			}
 		}
 	}
 	
-	@GetMapping("/current-user")
-	public String getCurrentUser(Principal principal) {
-		out.println(principal.getName());
-		return principal.toString();
-	}
+//	@GetMapping("/current-user")
+//	public String getCurrentUser(Principal principal) {
+////		out.println(principal.getName());
+//		return principal.toString();
+//	}
 		
 }
