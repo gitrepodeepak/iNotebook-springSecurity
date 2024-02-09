@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Your CSS file -->
+    <!-- <link rel="stylesheet" href="/css/styles.css">  Your CSS file -->
 </head>
 <body>
     <div class="login-container">
+    	<!--  <p th:text=${SPRING_SECURITY_LAST_EXCEPTION.message}></p> -->
         <h2>Login</h2>
         <form th:action="@{/login}" method="post">
             <div>

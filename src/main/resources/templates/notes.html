@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Notes</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <main>
+        <h1>List Notes</h1>
+    <ul>
+        <!-- Iterate over the list and display each item -->
+        <li th:each="item : ${myNotes}" th:text="${item}"></li>
+    </ul>
+    </main>
+</body>
+</html>

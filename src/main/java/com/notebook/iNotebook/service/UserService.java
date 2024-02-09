@@ -22,16 +22,14 @@ public class UserService implements UserDetailsService{
 	
 	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
 	
-	public List<User> findAllUser(){
-		return userDao.findAll();
-	}
+//	public List<User> findAllUser(){
+//		return userDao.findAll();
+//	}
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = (User) userDao.findByUsername(username);
-		return new MyUserDetails(user);
-//		return userDao.findByUsername(username);
-		
+		return new MyUserDetails(user);		
 	}
 	
 	public User saveUser(User user) {

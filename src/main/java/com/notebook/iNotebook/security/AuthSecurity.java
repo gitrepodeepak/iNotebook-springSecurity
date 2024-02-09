@@ -19,6 +19,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.util.AntPathMatcher;
 
 import com.notebook.iNotebook.service.UserService;
 
@@ -66,16 +67,24 @@ public class AuthSecurity{
         	.csrf(csrf->csrf
         			.disable())
             .authorizeHttpRequests((authorize) -> authorize
-            		.requestMatchers("/loginform","/signupform").permitAll()
+            		.requestMatchers("/loginform","/signupform", "/signup", "/logout", "/css/**").permitAll()
                     .anyRequest().authenticated()
             )
-//			.formLogin(formLogin -> formLogin
-//			.loginPage("/loginform").permitAll()
-//			)
+			.formLogin((formLogin) -> formLogin
+					.loginPage("/loginform").permitAll()
+					.loginProcessingUrl("/login")
+					.defaultSuccessUrl("/").permitAll()
+			)
+			.logout((logout) -> logout
+					.logoutUrl("/logout").permitAll()
+					.invalidateHttpSession(true)
+					.clearAuthentication(true)
+					.logoutSuccessUrl("/loginform").permitAll()
+					)
 //            .csrf().ignoringRequestMatchers("/api/**")
 			.httpBasic(Customizer.withDefaults())
-			.formLogin(Customizer.withDefaults())
-            .rememberMe(Customizer.withDefaults())
+//			.formLogin(Customizer.withDefaults())
+//            .rememberMe(Customizer.withDefaults())
             ;
 
 		return http.build();

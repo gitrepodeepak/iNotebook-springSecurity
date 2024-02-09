@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Home</title>
+	<title>Home</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
-	<h1>Welcome Home</h1>
+	<main>
+		<h1>Welcome <span th:text="${username}"></span> </h1>
+		<a href="/logout">logout</a>
+    </main>
 </body>
 </html>

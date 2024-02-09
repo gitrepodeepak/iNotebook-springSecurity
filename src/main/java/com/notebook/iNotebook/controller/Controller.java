@@ -8,7 +8,9 @@ import java.util.Optional;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
@@ -22,13 +24,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.notebook.iNotebook.dao.UserDao;
+import com.notebook.iNotebook.model.MyUserDetails;
 import com.notebook.iNotebook.model.User;
 import com.notebook.iNotebook.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @org.springframework.stereotype.Controller
 //@CrossOrigin
 //@RequestMapping("/api")
 public class Controller {
+	
+	@Autowired
+	private UserDao userDao;
 	
 	@Autowired
 	private UserService userService;
@@ -39,7 +50,9 @@ public class Controller {
 //	PrintWriter out = new PrintWriter(System.out); 
 	
 	@GetMapping("/")
-	public String home() {
+	public String home(Principal principal, Model model) {
+		String username = principal.getName();
+		model.addAttribute("username", username);
 		return "index.html";
 	}
 	
@@ -57,7 +70,7 @@ public class Controller {
 //			this.authenticationManager.authenticate(authenticationRequest);
 //		// ...
 //	}
-	
+//	
 //	public record LoginRequest(String username, String password) {
 //	}
 	
@@ -77,17 +90,17 @@ public class Controller {
 //		}
 //	}
 	
-	@PostMapping("/login")
-	public String login(@RequestParam String username, @RequestParam String password, Model model) throws Exception{
-		UserDetails myUser = userService.loadUserByUsername(username);
-		if(encoder.matches(password, myUser.getPassword())) {
-			model.addAttribute("message", "Login Success");
-			return "result.html";			
-		}else {
-			model.addAttribute("message", "Password did not Match!");
-			return "result.html";
-		}
-	}
+//	@PostMapping("/login")
+//	public String login(@RequestParam String username, @RequestParam String password, Model model) throws Exception{
+//		UserDetails myUser = userService.loadUserByUsername(username);
+//		if(encoder.matches(password, myUser.getPassword())) {
+//			model.addAttribute("message", "Login Success");
+//			return "result.html";			
+//		}else {
+//			model.addAttribute("message", "Password did not Match!");
+//			return "result.html";
+//		}
+//	}
 	
 	@GetMapping("/signupform")
 	public String signupForm() {
@@ -117,7 +130,27 @@ public class Controller {
 	@PostMapping("/signup")
 	public String signup(@RequestParam String username,
 			@RequestParam String email,
-			@RequestParam String password, Model model) throws Exception{
+			@RequestParam String password, Model model, 
+			SecurityContextHolder securityContextHolder
+			) throws Exception{
+		
+		
+//		org.springframework.security.core.Authentication authentication = securityContextHolder.getContext().getAuthentication();
+//		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+//		    String currentUserName = authentication.getName();
+//		    // Use the username as needed
+//			return "redirect:/home";
+//		}
+
+		
+//		org.springframework.security.core.Authentication auth = securityContextHolder.getContext().getAuthentication();
+//        if (auth.isAuthenticated()) {
+//            // User is already logged in, redirect them to another page
+//             // Redirect to home page or any other desired page
+//        	return "redirect:/home";
+//        }else {
+        // If not logged in, allow access to the user creation page
+//        return "createUser";
 		if(username.isEmpty() || email.isEmpty() || password.isEmpty()){
 			model.addAttribute("message", "username, email or password cannot be empty");
 			return "result.html";
@@ -125,8 +158,9 @@ public class Controller {
 			model.addAttribute("message", "Password can't be less than 5 characters!");
 			return "result.html";
 		}
-		else {			
-			if (userService.loadUserByUsername(username) != null ) {
+		else {
+			
+			if (userDao.findByUsername(username) != null ) {
 				model.addAttribute("message", "username, already register");
 				return "result.html";
 			}else {
@@ -137,7 +171,17 @@ public class Controller {
 			return "result.html";
 			}
 		}
-	}
+        }
+//	}
+	
+	@GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // Invalidate the session
+        }
+        return "redirect:/login"; // Redirect to home page or any other desired page
+    }
 	
 //	@GetMapping("/current-user")
 //	public String getCurrentUser(Principal principal) {
