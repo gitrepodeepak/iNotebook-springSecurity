@@ -12,8 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import jakarta.websocket.Session;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 
 
 @Configuration
@@ -28,6 +29,12 @@ public class AuthSecurity{
 	protected PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(16);
 	}
+	
+//	@Bean(name = "authenticationManagerBean")
+//    @Override
+//    public AuthenticationManager authenticationManagerBean() throws Exception {
+//        return super.authenticationManagerBean();
+//    }
 	
 	@Bean
 	protected AuthenticationManager authenticationManager( UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
@@ -51,14 +58,22 @@ public class AuthSecurity{
         	.csrf(csrf->csrf
         			.disable())
             .authorizeHttpRequests((authorize) -> authorize
-            		.requestMatchers("/loginform","/signupform", "/signup").permitAll()
+            		.requestMatchers("/loginform","/signupform","/login", "/signup").permitAll()
                     .anyRequest().authenticated()
             )
-			.formLogin((formLogin) -> formLogin
-					.loginProcessingUrl("/login")
-//					.loginPage("/loginform").permitAll()
-//					.defaultSuccessUrl("/").permitAll()
-			)
+//			.formLogin((formLogin) -> formLogin
+//					.loginProcessingUrl("/login")
+////////					.loginPage("/loginform").permitAll()
+////////					.defaultSuccessUrl("/").permitAll()
+//			)
+            .securityContext((securityContext) -> securityContext
+        			.securityContextRepository(
+        					new DelegatingSecurityContextRepository(
+								new HttpSessionSecurityContextRepository(),
+								new RequestAttributeSecurityContextRepository()
+							)
+						)
+        		)
 			.logout((logout) -> logout
 					.logoutUrl("/logout").permitAll()
 					.invalidateHttpSession(true)
@@ -66,10 +81,10 @@ public class AuthSecurity{
 					.deleteCookies()
 //					.logoutSuccessUrl("/loginform").permitAll()
 					)
-//            .csrf().ignoringRequestMatchers("/api/**")
 			.httpBasic(Customizer.withDefaults())
-//			.formLogin(Customizer.withDefaults())
-//            .rememberMe(Customizer.withDefaults())
+//				.formLogin(Customizer.withDefaults())
+//            	.csrf().ignoringRequestMatchers("/api/**")
+//            	.rememberMe(Customizer.withDefaults())
             ;
 
 		return http.build();

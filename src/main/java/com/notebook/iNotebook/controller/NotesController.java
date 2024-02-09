@@ -4,11 +4,16 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.notebook.iNotebook.model.MyUserDetails;
 import com.notebook.iNotebook.service.NotesService;
 
 @RestController
@@ -18,8 +23,8 @@ public class NotesController {
 	NotesService notesService;
 	
 	@GetMapping("/notes")
-	public List<String> getNotes(Principal principal) throws Exception {
-		String username = principal.getName();
+	public List<String> getNotes(Principal principal, Authentication authentication) throws Exception {
+		String username = principal.getName();		
 		if(username!=null) {
 			List<String> myNotes =  notesService.loadNotes(username);
 			if(myNotes==null) {
@@ -34,13 +39,13 @@ public class NotesController {
 	
 	@PostMapping("/addnote")
 	public String addNote(Principal principal, @RequestParam List<String> notes) throws Exception {
-		String username = principal.getName();
+		String username = principal.getName();		
 		if(username!=null) {
 			notesService.addNotes(username, notes);
 //			res.setStatus(HttpServletResponse.SC_CREATED);
-			return "note Created Success!";
+			return "Note Created successfully!";
 		}else {
-			throw new Exception("Error adding note!");
+			throw new Exception("Error during adding note!");
 		}
 	}
 	
@@ -50,9 +55,9 @@ public class NotesController {
 		if(username!=null) {
 			notesService.delNote(username, note);
 //			res.setStatus(HttpServletResponse.SC_CREATED);
-			return "note Deleted Success!";
+			return "Note deleted successfully!";
 		}else {
-			throw new Exception("Error deleting note!");
+			throw new Exception("Error during deleting note!");
 		}
 	}
 	

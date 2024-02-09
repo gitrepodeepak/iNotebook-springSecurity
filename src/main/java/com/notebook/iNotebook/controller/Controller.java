@@ -32,24 +32,6 @@ public class Controller {
 //		return "index.html";
 //	}
 	
-//	private AuthenticationManager authenticationManager;
-//
-//	public void LoginController(AuthenticationManager authenticationManager) {
-//		this.authenticationManager = authenticationManager;
-//	}
-//
-//	@PostMapping("/login")
-//	public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
-//		Authentication authenticationRequest =
-//			UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(), loginRequest.password());
-//		Authentication authenticationResponse =
-//			this.authenticationManager.authenticate(authenticationRequest);
-//		// ...
-//	}
-//	
-//	public record LoginRequest(String username, String password) {
-//	}
-	
 	
 //	@GetMapping("/loginform")
 //	public String loginform() {

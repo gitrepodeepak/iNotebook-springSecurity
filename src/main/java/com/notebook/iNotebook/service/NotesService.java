@@ -1,6 +1,5 @@
 package com.notebook.iNotebook.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,20 +37,20 @@ public class NotesService {
 		}
     }
 	
-	public String delNote(String username, String note) throws Exception{
+	public void delNote(String username, String note) throws Exception{
 		if(notesDao.findByUsername(username)==null) {
-			return "No notes found.";
+			throw new Exception("No Notes Found");
 		}else {
 			Notes myNotes = notesDao.findByUsername(username);
 			List<String> myNotesList = myNotes.getNotes();
 			if (!myNotesList.contains(note)) {
-		        return "Note not found.";
+				throw new Exception("Notes Not Found");
 		    }else {
 		    	myNotesList.remove(note);
 		    	myNotes.setNotes(myNotesList);
-				notesDao.delete(myNotes);
-				addNotes(username, myNotesList);
-				return "Note Deleted Succesfully";
+//		    	addNotes(username, null);
+		    	notesDao.delete(myNotes);
+		    	addNotes(username, myNotesList);
 	        }
 		}
 		}
