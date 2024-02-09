@@ -13,7 +13,6 @@ public class MyUserDetails implements UserDetails{
 	private static final long serialVersionUID = 1L;
 	
 	private String username;
-	private String email;
 	public String password;
 
 
@@ -25,7 +24,6 @@ public class MyUserDetails implements UserDetails{
 	public MyUserDetails(User user) {
 		this.username = user.getUsername();
 		this.password = user.getPassword();
-		this.email = user.getEmail();
 	}
 	
 	@Override
@@ -37,11 +35,6 @@ public class MyUserDetails implements UserDetails{
 	public String getPassword() {
 		return password;
 	}
-
-	public String getEmail() {
-		return email;
-	}
-	
 
 	@Override
 	public boolean isAccountNonExpired() {

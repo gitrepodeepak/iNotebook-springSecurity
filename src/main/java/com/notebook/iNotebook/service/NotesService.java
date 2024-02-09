@@ -1,6 +1,6 @@
 package com.notebook.iNotebook.service;
 
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,27 +16,55 @@ public class NotesService {
 	NotesDao notesDao;
 	
 	public List<String> loadNotes(String username) throws Exception{
-//		return notesDao.findByUsername(username);
-		Notes notes = notesDao.findByUsername(username);
-		
-		if (notes.getUsername() != null) {
-			return notes.getNotes();
-			
+		if(notesDao.findByUsername(username)==null) {
+			throw new Exception("No Notes Found");
 		}else {
-			throw new Exception("username is not found");
+//			return notesDao.findByUsername(username);		
+			Notes notes = notesDao.findByUsername(username);
+			return notes.getNotes();
 		}
 	}
 	
-	public void addNotes(String username, String note) throws Exception{
-		Notes notes = notesDao.findByUsername(username);
-		
-		if (notes.getUsername() != null) {
-			List<String> myNotes = notes.getNotes();
-			myNotes.add(note);
-			notes.setNotes(myNotes);
-			notesDao.save(notes);
+	public void addNotes(String username, List<String> notes) throws Exception{
+		if(notesDao.findByUsername(username)==null) {
+			Notes myNote = new Notes(username, notes);
+			notesDao.save(myNote);
 		}else {
-			throw new Exception("There is erro in adding note");
+			Notes myNotes = notesDao.findByUsername(username);
+			List<String> myNewNotes = myNotes.getNotes();
+			myNewNotes.addAll(notes);
+			myNotes.setNotes(myNewNotes);
+			notesDao.save(myNotes);			
 		}
     }
+	
+	public String delNote(String username, String note) throws Exception{
+		if(notesDao.findByUsername(username)==null) {
+			return "No notes found.";
+		}else {
+			Notes myNotes = notesDao.findByUsername(username);
+			List<String> myNotesList = myNotes.getNotes();
+			if (!myNotesList.contains(note)) {
+		        return "Note not found.";
+		    }else {
+		    	myNotesList.remove(note);
+		    	myNotes.setNotes(myNotesList);
+				notesDao.delete(myNotes);
+				addNotes(username, myNotesList);
+				return "Note Deleted Succesfully";
+	        }
+		}
+		}
+		
+//		if(notesDao.findByUsername(username)==null) {
+//			Notes myNote = new Notes(username, notes);
+//			notesDao.save(myNote);
+//		}else {
+//			Notes myNotes = notesDao.findByUsername(username);
+//			List<String> myNewNotes = myNotes.getNotes();
+//			myNewNotes.addAll(notes);
+//			myNotes.setNotes(myNewNotes);
+//			notesDao.save(myNotes);			
+//		}
+	
 }

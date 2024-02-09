@@ -11,14 +11,27 @@ import com.mongodb.lang.NonNull;
 @Document(collection = "notes")
 public class Notes {
 	
+//	@NonNull
+//	@Indexed(unique=true)
+//	private String id;
+
 	@Id
 	@NonNull
 	@Indexed(unique=true)
 	private String username;
+	
 	@NonNull
 	private List<String> notes;
 	
+	public Notes(String username, List<String> notes) {
+		super();
+		this.username = username;
+		this.notes = notes;
+	}
 	
+//	public String getId() {
+//		return id;
+//	}
 	public String getUsername() {
 		return username;
 	}

@@ -1,24 +1,13 @@
 package com.notebook.iNotebook.model;
 
-import java.util.Collection;
-//import java.util.UUID;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.mongodb.lang.NonNull;
 
 @Document(collection = "users")
-//public class User implements UserDetails{
-	public class User {
-	/**
-	 * 
-	 */
-//	private static final long serialVersionUID = 1L;
-
+public class User {
 	
 	@Id
 	@NonNull
@@ -31,7 +20,7 @@ import com.mongodb.lang.NonNull;
 	public String password;
 
 	public User(String username, String email, String password) {
-//		super();
+		super();
 		this.username = username;
 		this.email = email;
 		this.password = password;
@@ -59,30 +48,6 @@ import com.mongodb.lang.NonNull;
 	@Override
 	public String toString() {
 		return "User [username=" + username + ", email=" + email + ", password=" + password + "]";
-	}
-	
-//	@Override
-//	public Collection<? extends GrantedAuthority> getAuthorities() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//	
-//	@Override
-//	public boolean isAccountNonExpired() {
-//		return true;
-//	}
-//	@Override
-//	public boolean isAccountNonLocked() {
-//		return true;
-//	}
-//	@Override
-//	public boolean isCredentialsNonExpired() {
-//		return true;
-//	}
-//	@Override
-//	public boolean isEnabled() {
-//		return true;
-//	}
-	
+	}	
 
 }
