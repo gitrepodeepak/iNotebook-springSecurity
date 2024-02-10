@@ -13,12 +13,11 @@ public class NotesService {
 	
 	@Autowired
 	NotesDao notesDao;
-	
+		
 	public List<String> loadNotes(String username) throws Exception{
 		if(notesDao.findByUsername(username)==null) {
 			throw new Exception("No Notes Found");
-		}else {
-//			return notesDao.findByUsername(username);		
+		}else {		
 			Notes notes = notesDao.findByUsername(username);
 			return notes.getNotes();
 		}
@@ -37,6 +36,7 @@ public class NotesService {
 		}
     }
 	
+
 	public void delNote(String username, String note) throws Exception{
 		if(notesDao.findByUsername(username)==null) {
 			throw new Exception("No Notes Found");
@@ -47,23 +47,9 @@ public class NotesService {
 				throw new Exception("Notes Not Found");
 		    }else {
 		    	myNotesList.remove(note);
-		    	myNotes.setNotes(myNotesList);
-//		    	addNotes(username, null);
-		    	notesDao.delete(myNotes);
-		    	addNotes(username, myNotesList);
+		    	notesDao.updateNotes(username, myNotesList);
 	        }
 		}
 		}
-		
-//		if(notesDao.findByUsername(username)==null) {
-//			Notes myNote = new Notes(username, notes);
-//			notesDao.save(myNote);
-//		}else {
-//			Notes myNotes = notesDao.findByUsername(username);
-//			List<String> myNewNotes = myNotes.getNotes();
-//			myNewNotes.addAll(notes);
-//			myNotes.setNotes(myNewNotes);
-//			notesDao.save(myNotes);			
-//		}
 	
 }

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.notebook.iNotebook.model.LoginRequest;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -26,10 +28,17 @@ public class LoginController {
 
 	@PostMapping("/login")
 	public ResponseEntity<Void> login(HttpServletRequest request, @RequestBody LoginRequest loginRequest) {
-		Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(), loginRequest.password());
+		Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.getUsername(), loginRequest.getPassword());
 		Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
 		// ...
 //		SecurityContextHolder.getContext().setAuthentication(authenticationResponse);
+//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication != null) {
+//            Cookie authCookie = new Cookie("AUTH_TOKEN", "your_token_here");
+//            authCookie.setMaxAge(3600); // Cookie expiration time in seconds
+//            authCookie.setPath(request.getContextPath()); // Set cookie path
+//            response.addCookie(authCookie);
+//        }
 		
 		HttpSession session = request.getSession(true);
 		SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -39,7 +48,7 @@ public class LoginController {
 		return ResponseEntity.ok().build();
 	}
 	
-	public record LoginRequest(String username, String password) {
-		
-	}
+//	public record LoginRequest(String username, String password) {
+//		
+//	}
 }
