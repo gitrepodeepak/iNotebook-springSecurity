@@ -1,4 +1,4 @@
-package com.notebook.iNotebook.controller;
+package com.notebook.iNotebook.jwtAuthentication;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,14 +24,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.notebook.iNotebook.jwtAuthentication.JwtHelper;
-import com.notebook.iNotebook.jwtAuthentication.JwtRequest;
-import com.notebook.iNotebook.jwtAuthentication.JwtResponse;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/auth")
 public class AuthController {
 
