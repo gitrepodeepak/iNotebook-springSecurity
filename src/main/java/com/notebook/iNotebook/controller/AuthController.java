@@ -16,11 +16,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.notebook.iNotebook.jwtAuthentication.JwtHelper;
@@ -31,6 +33,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -49,14 +52,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(HttpServletRequest req, @RequestBody JwtRequest request) {
-
+    	
         this.doAuthenticate(request.getUsername(), request.getPassword());
 
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
         String token = this.helper.generateToken(userDetails);
 
-        JwtResponse response = new JwtResponse(token, userDetails.getUsername());    
+        JwtResponse response = new JwtResponse(token, userDetails.getUsername());
         
 //        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
 //        		new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

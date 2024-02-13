@@ -9,7 +9,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
@@ -18,10 +18,10 @@ public class JwtRequest {
 	private String username;
 	private String password;
 	
-	JwtRequest(String username, String password){
-		this.username = username;
-		this.password = password;
-	}
+	public JwtRequest(String username, String password){
+	 	this.username = username;
+	 	this.password = password;
+	 }
 	
 	public String getUsername() {
 		return username;

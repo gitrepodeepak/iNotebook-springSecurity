@@ -9,7 +9,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
@@ -17,11 +17,11 @@ public class JwtResponse {
 	private String token;
 	private String username;
 	
-	public JwtResponse(String token, String username) {
-		super();
-		this.token = token;
-		this.username = username;
-	}
+	 public JwtResponse(String token, String username) {
+	 	super();
+	 	this.token = token;
+	 	this.username = username;
+	 }
 	
 	public String getToken() {
 		return token;
