@@ -69,13 +69,8 @@ public class AuthSecurity{
 //        	.securityMatcher("/**")
         	.csrf(csrf->csrf
         			.disable())
-<<<<<<< HEAD
 //        	.cors(cors->cors
 //        			.disable())
-=======
-        	.cors(cors->cors
-        			.disable())
->>>>>>> fef24e79559b2a678fab541c6d201abbdaf132bd
             .authorizeHttpRequests((authorize) -> authorize
             		.requestMatchers("/loginform","/signupform", "/auth/login").permitAll()
                     .anyRequest().authenticated()
