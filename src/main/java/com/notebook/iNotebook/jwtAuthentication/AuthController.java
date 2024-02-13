@@ -1,4 +1,4 @@
-package com.notebook.iNotebook.controller;
+package com.notebook.iNotebook.jwtAuthentication;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,10 +24,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.notebook.iNotebook.jwtAuthentication.JwtHelper;
-import com.notebook.iNotebook.jwtAuthentication.JwtRequest;
-import com.notebook.iNotebook.jwtAuthentication.JwtResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
