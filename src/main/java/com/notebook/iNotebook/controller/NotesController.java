@@ -8,13 +8,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.notebook.iNotebook.model.DelNoteModel;
+import com.notebook.iNotebook.model.Notes;
 import com.notebook.iNotebook.service.NotesService;
 
 @RestController
-@CrossOrigin
+//@CrossOrigin
 public class NotesController {
 	
 	@Autowired
@@ -36,23 +39,33 @@ public class NotesController {
 	}
 	
 	@PostMapping("/addnote")
-	public String addNote(Principal principal, @RequestParam List<String> notes) throws Exception {
-		String username = principal.getName();		
+	public String addNote(@RequestBody Notes notes) throws Exception {	
+		String username = notes.getUsername();
+		List<String> notesList = notes.getNotes();
 		if(username!=null) {
-			notesService.addNotes(username, notes);
-//			res.setStatus(HttpServletResponse.SC_CREATED);
+			notesService.addNotes(username, notesList);
 			return "Note Created successfully!";
 		}else {
 			throw new Exception("Error during adding note!");
 		}
 	}
 	
+//	@PostMapping("/delnote")
+//	public String delNote(@RequestParam String note, @RequestParam String username) throws Exception {
+//		if(username!=null) {
+//			notesService.delNote(username, note);
+////			res.setStatus(HttpServletResponse.SC_CREATED);
+//			return "Note deleted successfully!";
+//		}else {
+//			throw new Exception("Error during deleting note!");
+//		}
+//	}
 	@PostMapping("/delnote")
-	public String delNote(Principal principal, @RequestParam String note) throws Exception {
-		String username = principal.getName();
+	public String delNote(@RequestBody DelNoteModel note) throws Exception {
+		String username = note.getUsername();
+		String delnote = note.getNote();
 		if(username!=null) {
-			notesService.delNote(username, note);
-//			res.setStatus(HttpServletResponse.SC_CREATED);
+			notesService.delNote(username, delnote);
 			return "Note deleted successfully!";
 		}else {
 			throw new Exception("Error during deleting note!");
