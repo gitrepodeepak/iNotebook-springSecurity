@@ -91,7 +91,7 @@ public class AuthSecurity{
         	.cors(cors -> cors
         			.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests((authorize) -> authorize
-            		.requestMatchers("/loginform","/signupform", "/auth/login").permitAll()
+            		.requestMatchers("/signup", "/auth/login").permitAll()
                     .anyRequest().authenticated()
             )
             

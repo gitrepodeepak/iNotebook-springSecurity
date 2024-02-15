@@ -1,11 +1,11 @@
 package com.notebook.iNotebook.controller;
 
-import java.security.Principal;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.notebook.iNotebook.dao.UserDao;
@@ -46,27 +46,27 @@ public class Controller {
 	
 	
 	@PostMapping("/signup")
-	public String signup(@RequestParam String username,
-			@RequestParam String email,
-			@RequestParam String password, 
-			Principal principal) throws Exception{
-		if(principal.getName()==null) {
-			if(username.isEmpty() || email.isEmpty() || password.isEmpty()){
-				return "Username, email or password cannot be empty";
-			}else if(password.length()<5){
-				return "Password can't be less than 5 characters!";
+	public ResponseEntity<?> signup(@RequestBody User user) throws Exception{
+		if(user.getUsername()!=null) {
+			if(user.getUsername().isEmpty() || user.getEmail().isEmpty() || user.getPassword().isEmpty()){
+				String result = "Username, email or password cannot be empty";
+				return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
 			}else {
-				if (userDao.findByUsername(username) != null ) {
-					return "Username, already register";
+				if (userDao.findByUsername(user.getUsername()) != null ) {
+					String result = "Username, already register";
+					return new ResponseEntity<>(result, HttpStatus.CONFLICT);
 				}else {
-					String result = encoder.encode(password);
-					User myUser = new User(username, email, result);
+					String encodedPassword = encoder.encode(user.getPassword());
+					User myUser = new User(user.getUsername(), user.getEmail(), encodedPassword);
 					userService.saveUser(myUser);
-					return "Account created success";
+					String result = "Account created success";
+					return new ResponseEntity<>(result, HttpStatus.CREATED);
 				}
 			}
-        }else {
-        	return "User already logged In";
+        }
+		else {
+        	String result = "User already logged In";
+        	return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
 	}
 	
