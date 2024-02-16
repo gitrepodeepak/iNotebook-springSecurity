@@ -16,7 +16,9 @@ public class NotesService {
 		
 	public List<String> loadNotes(String username) throws Exception{
 		if(notesDao.findByUsername(username)==null) {
-			throw new Exception("No Notes Found");
+//			throw new Exception("No Notes Found");
+//			List<String> result = new ArrayList<String>();
+			return null;
 		}else {		
 			Notes notes = notesDao.findByUsername(username);
 			return notes.getNotes();

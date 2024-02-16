@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,14 +26,16 @@ public class NotesController {
 	NotesService notesService;
 	
 	@GetMapping("/notes")
-	public List<String> getNotes(Principal principal, Authentication authentication) throws Exception {
+	public ResponseEntity<List<String>> getNotes(Principal principal, Authentication authentication) throws Exception {
 		String username = principal.getName();		
 		if(username!=null) {
 			List<String> myNotes =  notesService.loadNotes(username);
 			if(myNotes==null) {
-				throw new Exception("Notes not found");
+//				throw new Exception("Notes not found");
+//				String result = "No notes found";
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}else {
-				return myNotes;							
+				return new ResponseEntity<>(myNotes, HttpStatus.OK);							
 			}
 		}else {
 			throw new Exception("Error founding notes!");
